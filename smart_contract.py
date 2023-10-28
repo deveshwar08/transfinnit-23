@@ -1,4 +1,5 @@
 import smartpy as sp
+
 FA2 = sp.io.import_template("fa2_lib.py")
 
 class Token(FA2.Admin, FA2.MintNft, FA2.Fa2Nft):
@@ -18,13 +19,14 @@ class Marketplace(sp.Contract):
                     holder=sp.TAddress,
                     author=sp.TAddress,
                     amount=sp.TMutez,
+                    prompt=sp.TString,
                     token_id=sp.TNat,
                     collectable=sp.TBool)),
             token_id=0,
             )
 
     @sp.entry_point
-    def mint(self, params):
+    def mint(self, params):        
         mint_params = sp.TList(
             sp.TRecord(
                 to_=sp.TAddress,
@@ -33,31 +35,53 @@ class Marketplace(sp.Contract):
         )
         c = sp.contract(mint_params, self.data.token, entry_point="mint").open_some()
 
-        args = [sp.record(
-            to_=sp.self_address,
-            metadata={ '': params.metadata })]
+        args = [
+            sp.record(
+                to_=sp.self_address,
+                metadata={ '': params.metadata }
+            )]
         sp.transfer(args, sp.mutez(0), c)
         
         self.data.data[self.data.token_id] = sp.record(
-            holder=sp.self_address,
+            holder=sp.sender,
             author=sp.sender,
-            amount=params.amount,
+            amount=sp.mutez(0),
+            prompt=params.prompt,
             token_id=self.data.token_id,
-            collectable=True)
+            collectable=False
+        )
+        
         self.data.token_id += 1
 
     def fa2_transfer(self, fa2, from_, to_, token_id, amount):
         c = sp.contract(sp.TList(sp.TRecord(from_=sp.TAddress, txs=sp.TList(sp.TRecord(amount=sp.TNat, to_=sp.TAddress, token_id=sp.TNat).layout(("to_", ("token_id", "amount")))))), fa2, entry_point='transfer').open_some()
         sp.transfer(sp.list([sp.record(from_=from_, txs=sp.list([sp.record(amount=amount, to_=to_, token_id=token_id)]))]), sp.mutez(0), c)
 
-
     @sp.entry_point
     def collect(self, params):
         sp.verify(sp.amount == self.data.data[params.token_id].amount, "WrongAmount")
         sp.verify(self.data.data[params.token_id].collectable, "NotCollectable")
         sp.verify(self.data.data[params.token_id].author != sp.sender, "SenderNotAuthor")
+        
         self.data.data[params.token_id].collectable = False
         self.data.data[params.token_id].holder = sp.sender
+
+        sp.send(self.data.data[params.token_id].author, sp.split_tokens(sp.amount, 97, 100))
+        self.fa2_transfer(self.data.token, sp.self_address, sp.sender, params.token_id, 1)
+
+    @sp.entry_point
+    def publish_nft(self, params):
+        sp.verify(params.amount > sp.mutez(0), "NegativeAmt")
+        sp.verify(self.data.data[params.token_id].collectable == False, "AlreadyInMarketPlace")
+        sp.verify(self.data.data[params.token_id].holder == sp.sender, "SenderNotHolder")
+        self.data.data[params.token_id].amount = params.amount
+        self.data.data[params.token_id].collectable = True
+
+    @sp.entry_point
+    def update_nft_value(self, params):
+        sp.verify(self.data.data[params.token_id].holder == sp.sender, "SenderNotHolder")
+        sp.verify(self.data.data[params.token_id].amount > sp.mutez(0), "NegativeAmt")
+        self.data.data[params.token_id].amount = params.amount
 
     @sp.entry_point
     def update_admin(self, params):
@@ -68,7 +92,6 @@ class Marketplace(sp.Contract):
     def collect_management_rewards(self, params):
         sp.verify(sp.sender == self.data.admin, "NotAdmin")
         sp.send(params.address, params.amount)
-
 
 @sp.add_test(name = "Non Fungible Token")
 def test():
@@ -93,21 +116,27 @@ def test():
     scenario += marketplace
 
     marketplace.mint(
-        amount=sp.tez(100),
-        metadata=sp.pack(
-            "ipfs://bafyreibwl5hhjgrat5l7cmjlv6ppwghm6ijygpz2xor2r6incfcxnl7y3e/metadata.json"
-    )).run(sender=admin, valid=False, exception="FA2_NOT_ADMIN")
+        metadata=sp.pack("ipfs://bafyreibwl5hhjgrat5l7cmjlv6ppwghm6ijygpz2xor2r6incfcxnl7y3e/metadata.json"),
+        prompt="just a prompt").run(sender=admin, valid=False, exception="FA2_NOT_ADMIN")
     token_contract.set_administrator(marketplace.address).run(sender=admin)
+    
     marketplace.mint(
-        amount=sp.tez(100),
-        metadata= sp.pack(
-            "ipfs://bafyreibwl5hhjgrat5l7cmjlv6ppwghm6ijygpz2xor2r6incfcxnl7y3e/metadata.json"
-        )).run(sender=admin)
-    marketplace.mint(amount=sp.mutez(5_600_000), metadata=sp.pack("123423")).run(sender=mark)
+        metadata= sp.pack("ipfs://bafyreibwl5hhjgrat5l7cmjlv6ppwghm6ijygpz2xor2r6incfcxnl7y3e/metadata.json"),
+        prompt="just a prompt").run(sender=admin)
+    marketplace.publish_nft(token_id=0, amount=sp.tez(100)).run(sender=admin)
+    
+    marketplace.mint(metadata=sp.pack("123423"), prompt="Just a prompt").run(sender=mark)
+    marketplace.publish_nft(token_id=1, amount=sp.mutez(5_600_000)).run(sender=mark)
+    
     scenario.h1("Collect")
     marketplace.collect(token_id=1).run(sender=elon, amount=sp.mutez(5_600_000))
-
     marketplace.collect_management_rewards(
         amount=sp.mutez(1000),
         address=admin.address
     ).run(sender = admin)
+    
+    scenario.h1("Publish NFT")
+    marketplace.publish_nft(token_id=1, amount=sp.mutez(7_600_000)).run(sender=elon)
+    
+    scenario.h1("Update NFT Value")
+    marketplace.update_nft_value(token_id=1, amount=sp.mutez(9_600_000)).run(sender=elon)
