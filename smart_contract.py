@@ -62,8 +62,12 @@ class Marketplace(sp.Contract):
         sp.verify(sp.amount == self.data.data[params.token_id].amount, "WrongAmount")
         sp.verify(self.data.data[params.token_id].collectable, "NotCollectable")
         sp.verify(self.data.data[params.token_id].author != sp.sender, "SenderNotAuthor")
+        
         self.data.data[params.token_id].collectable = False
         self.data.data[params.token_id].holder = sp.sender
+
+        sp.send(self.data.data[params.token_id].author, sp.split_tokens(sp.amount, 97, 100))
+        self.fa2_transfer(self.data.token, sp.self_address, sp.sender, params.token_id, 1)
 
     @sp.entry_point
     def publish_nft(self, params):
