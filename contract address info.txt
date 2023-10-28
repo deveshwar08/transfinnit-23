@@ -1,0 +1,55 @@
+Wallet Address
+
+tz1euZAZdxRhtE4nKFhRtXaL8TActZWQojgs
+
+
+
+
+Token address
+
+KT1KoBwe3dkoYRkEGnCs9sMfDNkwtLtjs4P8
+
+
+https://smartpy.dev/wallet/smart-contracts?addAddress=KT1KoBwe3dkoYRkEGnCs9sMfDNkwtLtjs4P8
+
+
+https://smartpy.dev/explorer?address=KT1KoBwe3dkoYRkEGnCs9sMfDNkwtLtjs4P8
+
+
+
+
+Contract_Address
+
+KT1MULmacoCxm2Wjb5ALKzYcJ65bazckUuJb
+
+
+https://smartpy.dev/wallet/smart-contracts?addAddress=KT1MULmacoCxm2Wjb5ALKzYcJ65bazckUuJb
+
+
+https://smartpy.dev/explorer?address=KT1MULmacoCxm2Wjb5ALKzYcJ65bazckUuJb
+
+
+
+
+
+[
+    {
+        "kind": "temporary",
+        "id": "failure",
+        "msg": "Operation op4Jz1srv1mr8XdEKxNEjhLhrp7hfun6oKCZZDh4fTgiHJttczi is branched on a block BMSTuFdpxAqzT8EVmzPEDw9bGKyt68WZHpQWoazgcSbQd9ahZu6 which is too old"
+    }
+]
+
+
+
+opKd2PdfdwiTY8Z8BbTvGoMGMcsxQiDz8Vznpn68HeTq7kv5113
+
+
+https://ghostnet.tzkt.io/opKd2PdfdwiTY8Z8BbTvGoMGMcsxQiDz8Vznpn68HeTq7kv5113/15603515
+
+
+
+
+
+
+
