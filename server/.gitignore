@@ -176,3 +176,5 @@ mysql_volume/
 *.sqlite
 *.log
 .pytest_cache
+./logs
+logs
