@@ -50,7 +50,9 @@ const Market = ({ Tezos }) => {
     />
   ));
 
-  const listedTokens = selector.filter((obj) => obj.collectable === true && obj.holder!== userAddress.userAddress);
+  const listedTokens = selector.filter(
+    (obj) => obj.collectable === true && obj.holder !== userAddress.userAddress
+  );
   const showlistedTokens = listedTokens.map((obj, idx) => (
     <Token
       key={idx}
@@ -77,6 +79,8 @@ const Market = ({ Tezos }) => {
             minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
+            boxSizing: "border-box",
+            overflowX: "hidden",
           }}
         >
           <Box
@@ -101,6 +105,7 @@ const Market = ({ Tezos }) => {
               padding: "1rem",
               gap: "1em",
               fontFamily: "Roboto Condensed",
+              boxSizing: "border-box",
             }}
           >
             <Box
@@ -110,7 +115,6 @@ const Market = ({ Tezos }) => {
                 textDecoration: market ? "underline" : "none",
                 color: market ? "#00E29E" : "#ffffff",
                 cursor: "pointer",
-
               }}
             >
               Market
@@ -121,7 +125,7 @@ const Market = ({ Tezos }) => {
                 fontSize: "1.5rem",
                 color: market ? "#ffffff" : "#00E29E",
                 textDecoration: market ? "none" : "underline",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               Collections
@@ -134,7 +138,7 @@ const Market = ({ Tezos }) => {
               minHeight: "100vh",
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
-              gap: "10em",
+              gap: "8em",
               padding: "2em 10em",
               boxSizing: "border-box",
             }}

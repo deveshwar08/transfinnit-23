@@ -28,12 +28,26 @@ const Header = ({ Tezos, wallet, setTezos }) => {
           fontFamily: "inter",
           display: "flex",
           width: "100%",
-          flexDirection: "row-reverse",
           top: "2.5em",
           right: "2em",
-          pointerEvents: "all"
+          pointerEvents: "all",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
+        <Link to="./">
+          <img
+            style={{
+              height: "5em",
+              width: "5em",
+              borderRadius: "50%",
+              marginLeft: "3em",
+              cursor: "pointer",
+            }}
+            src="/icon.jpeg"
+          ></img>
+        </Link>
+
         <Button
           onClick={onClick}
           style={{
@@ -43,11 +57,7 @@ const Header = ({ Tezos, wallet, setTezos }) => {
             fontSize: "1.5rem",
             border: "2px solid #00E29E",
             padding: "0.5rem 1rem",
-            "&:hover": {
-              backgroundColor: "#00E29E",
-              color: "#000000",
-              cursor: "pointer",
-            },
+            cursor: "pointer",
           }}
         >
           {selector.userAddress === "" ? "Connect Wallet" : "Disconnect Wallet"}

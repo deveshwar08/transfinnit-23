@@ -6,7 +6,7 @@ import styles from "./styles/show.module.css";
 import { Container, Box, BackgroundImage } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { Loader } from "@mantine/core";
-
+import Tilt from "react-parallax-tilt";
 const Show = ({ Tezos }) => {
   const selector = useSelector((state) => state.tokenData);
   const userAddress = useSelector((state) => state.walletConfig.user);
@@ -15,9 +15,7 @@ const Show = ({ Tezos }) => {
   const [data, setData] = useState(null);
   const [opened, setOpened] = useState(false);
   const inputRef = useRef();
-  const handleOpen = () => {
-    setOpened(true);
-  };
+
   const handleClose = () => {
     setOpened(false);
   };
@@ -37,8 +35,8 @@ const Show = ({ Tezos }) => {
           className={styles.left}
           style={{
             position: "absolute",
-            top: "30px",
-            left: "30px",
+            top: "60px",
+            left: "100px",
             height: "50px",
             width: "50px",
             background: `url("/left.png")`,
@@ -90,6 +88,7 @@ const Show = ({ Tezos }) => {
         <button
           class={styles.button}
           onClick={() => {
+            handleClose();
             if (data.collectable) {
               dispatch(
                 updateNFT({
@@ -125,24 +124,26 @@ const Show = ({ Tezos }) => {
       >
         {data !== null ? (
           <>
-            <Box
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: "0.7rem",
-                gap: "1em",
-              }}
-            >
-              <img
-                className={styles.img}
-                src={`https://ipfs.io/ipfs/${data.image.split("ipfs://")[1]}`}
-                alt={data.description}
+            <Tilt>
+              <Box
                 style={{
-                  borderRadius: "30px",
+                  display: "flex",
+                  flexDirection: "column",
+                  fontSize: "0.7rem",
+                  gap: "1em",
                 }}
-              />
-              Token {data.token_id}
-            </Box>
+              >
+                <img
+                  className={styles.img}
+                  src={`https://ipfs.io/ipfs/${data.image.split("ipfs://")[1]}`}
+                  alt={data.description}
+                  style={{
+                    borderRadius: "30px",
+                  }}
+                />
+                Token {data.token_id}
+              </Box>
+            </Tilt>
 
             <Box
               style={{
@@ -214,6 +215,9 @@ const Show = ({ Tezos }) => {
                   width: "100%",
                   justifyContent: "space-evenly",
                   alignItems: "center",
+                  fontFamily: "inter",
+                  fontWeight: "bold",
+                  color: "#ffffff",
                 }}
               >
                 <Box
