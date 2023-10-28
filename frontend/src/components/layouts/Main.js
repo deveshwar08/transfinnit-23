@@ -13,6 +13,11 @@ import styles from "./styles/main.module.css";
 const Main = () => {
   return (
     <MantineProvider>
+      <Container 
+      style={{
+        overflowX: "hidden",
+        scrollbarWidth: "none",
+      }}>
       <BackgroundImage src="/bg.png">
         <Container
           style={{
@@ -191,6 +196,7 @@ const Main = () => {
           </Box>
         </Container>
       </BackgroundImage>
+      </Container>
     </MantineProvider>
   );
 };

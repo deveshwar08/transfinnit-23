@@ -6,7 +6,14 @@ import { NFTStorage, File } from "nft.storage";
 import { mintNFT } from "../../actions";
 import { useDispatch } from "react-redux";
 
-import { Button, Box, Container, Alert, BackgroundImage, Loader } from "@mantine/core";
+import {
+  Button,
+  Box,
+  Container,
+  Alert,
+  BackgroundImage,
+  Loader,
+} from "@mantine/core";
 
 import config from "../../config";
 
@@ -77,7 +84,6 @@ const Create = ({ Tezos }) => {
     })();
   };
 
-
   return (
     <BackgroundImage src="/bg.png">
       <Container
@@ -98,6 +104,17 @@ const Create = ({ Tezos }) => {
           }}
         >
           CREATE YOUR <br></br>NFTs
+          <Box
+            style={{
+              fontFamily: "roboto condensed",
+              fontSize: "1.2rem",
+              marginTop: "1rem",
+              width: "70%",
+            }}
+          >
+            All it takes is a prompt and a click to mint your own NFTs and turn
+            them into a piece of art!
+          </Box>
         </Box>
         <form>
           <Box
@@ -129,6 +146,7 @@ const Create = ({ Tezos }) => {
 
                 <textarea
                   className={styles.input}
+                  rows={3}
                   placeholder="Token Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -136,7 +154,8 @@ const Create = ({ Tezos }) => {
                   required
                 />
 
-                <input
+                <textarea
+                  row={3}
                   className={styles.input}
                   placeholder="Prompt For your Image"
                   value={prompt}
@@ -158,9 +177,7 @@ const Create = ({ Tezos }) => {
                 onClick={onSubmit}
                 type="submit"
               >
-                {
-                  loadingSubmit ? "Minting..." : "Mint NFT"
-                }
+                {loadingSubmit ? "Minting..." : "Mint NFT"}
               </button>
             ) : (
               <button onClick={onPrompt} className={styles.button}>
