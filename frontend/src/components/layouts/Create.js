@@ -17,7 +17,7 @@ const Create = ({ Tezos }) => {
 	const [description, setDescription] = useState("");
 	const [prompt, setPrompt] = useState("");
 	const [symbol, setSymbol] = useState("");
-	const [amount, setAmount] = useState("0");
+	const [amount, setAmount] = useState(0);
 	const [image, setImage] = useState(null);
 	const [error, setError] = useState("");
 	const [loadingPrompt, setLoadingPrompt] = useState(false);
@@ -33,12 +33,11 @@ const Create = ({ Tezos }) => {
 		setError("");
 
 		(async () => {
-			const imageResponse = await axios.post("https://api.wizmodel.com/sdapi/v1/txt2img", {
+			const imageResponse = await axios.post(`${config.serverAPI}/generate`, {
 				"prompt": prompt,
-				"steps": 30
-			});
-			const imageBlob = await imageResponse.blob();
-			setImage(imageBlob);
+			}, {responseType: 'arraybuffer'});
+			const base64ImageString = Buffer.from(imageResponse.data, 'binary').toString('base64')
+			setImage("data:image/png;base64,"+base64ImageString);
 			setLoadingPrompt(false);
 		})();
 	}
@@ -61,23 +60,25 @@ const Create = ({ Tezos }) => {
 		setError("");
 
 		(async () => {
+			const resp = await fetch(image);
+			const imageBlob = await resp.blob();
 			const metadata = await client.store({
 				name: name,
 				description: description,
 				decimals: 0,
 				symbol: symbol,
 				image: new File(
-					[image],
-					'filename.jpg',
-					{ type: "image/jpg" }
+					[imageBlob],
+					`${name}.jpg`,
+					{ type: imageBlob.type }
 				),
 			});
 			console.log(metadata);
-			dispatch(mintNFT({ Tezos, amount, metadata: metadata.url }))
+			dispatch(mintNFT({ Tezos, amount, metadata: metadata.url, prompt }))
 
 			setLoadingSubmit(false);
 			setName("");
-			setAmount("0");
+			setAmount(0);
 			setDescription("");
 			setPrompt("");
 			setSymbol("");
@@ -149,7 +150,7 @@ const Create = ({ Tezos }) => {
 						Selling Amount (Mutez) (There is a 3% service fee)
 					</label>
 					<input
-						type="text"
+						type="number"
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
 						placeholder="Amount"
@@ -196,7 +197,7 @@ const Create = ({ Tezos }) => {
 				</div>
 				{image &&
 					<div>
-						<img src={URL.createObjectURL(image)} alt="" />
+						<img src={image} alt="" />
 					</div>
 				}
 				{error ? (
