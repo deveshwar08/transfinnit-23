@@ -1,0 +1,16 @@
+.input {
+  font-size: 1.2rem;
+  border-radius: 10px;
+  padding: 0.5rem 2rem;
+}
+.button {
+  font-size: 1.2rem;
+  border-radius: 10px;
+  padding: 0.5rem 2rem;
+  background: linear-gradient(#9310ff, #ff0666);
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-height: 40px;
+}

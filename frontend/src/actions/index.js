@@ -158,11 +158,11 @@ export const mintNFT = ({ Tezos, amount, metadata, prompt }) => {
   };
 };
 
-export const publish_nft = ({ Tezos, amount, token_id }) => {
+export const publish_nft = ({ Tezos, amount, id }) => {
   return async (dispatch) => {
     try {
       const contract = await Tezos.wallet.at(config.contractAddress);
-      const op = await contract.methods.publish_nft(amount, token_id).send();
+      const op = await contract.methods.publish_nft(amount, id).send();
       await op.confirmation();
       dispatch(fetchData());
     } catch (e) {
@@ -171,6 +171,18 @@ export const publish_nft = ({ Tezos, amount, token_id }) => {
   };
 };
 
+export const updateNFT = ({ Tezos, amount, id }) => {
+  return async (dispatch) => {
+    try {
+      const contract = await Tezos.wallet.at(config.contractAddress);
+      const op = await contract.methods.update_nft_value(amount, id).send();
+      await op.confirmation();
+      dispatch(fetchData());
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
 export const collectNFT = ({ Tezos, amount, id }) => {
   return async (dispatch) => {
     try {

@@ -1,16 +1,20 @@
-import React from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useToggle } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
-import { Container, Box, Button, MantineProvider } from "@mantine/core";
+import {
+  Container,
+  Box,
+  Button,
+  MantineProvider,
+  BackgroundImage,
+} from "@mantine/core";
 import { collectNFT } from "../../actions";
 import Token from "../sections/TokenCard";
 
 const Market = ({ Tezos }) => {
   const selector = useSelector((state) => state.tokenData);
   const userAddress = useSelector((state) => state.walletConfig.user);
-  const [value, toggle] = useToggle(["SHOW COLLECTED", "SHOW MARKET"]);
-
+  const [market, setmarket] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,7 +29,9 @@ const Market = ({ Tezos }) => {
     />
   ));
 
-  const filteredTokens = selector.filter((obj) => obj.holder === userAddress.userAddress);
+  const filteredTokens = selector.filter(
+    (obj) => obj.holder === userAddress.userAddress
+  );
 
   const collectedTokens = filteredTokens.map((obj, idx) => (
     <Token
@@ -44,8 +50,8 @@ const Market = ({ Tezos }) => {
     />
   ));
 
-  const listedTokens = selector.filter((obj) => obj.collectable === true);
-  const showlistedTokens = listedTokens.map((obj,idx) => (
+  const listedTokens = selector.filter((obj) => obj.collectable === true && obj.holder!== userAddress.userAddress);
+  const showlistedTokens = listedTokens.map((obj, idx) => (
     <Token
       key={idx}
       item={obj}
@@ -64,56 +70,79 @@ const Market = ({ Tezos }) => {
 
   return (
     <MantineProvider>
-      <Container
-        style={{
-          width: "100%",
-          minHeight: "100vh",
-          backgroundColor: "#111",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            width: "100%",
-            fontSize: "4rem",
-            color: "#ffffff",
-            padding: "1rem",
-          }}
-        >
-          EXPLORE THE ART WORLD
-        </Box>
-        <Button
-          style={{
-            width: "fit-content",
-            padding: "0.5em 1em",
-            fontSize: "1em",
-          }}
-          onClick={toggle}
-        >
-          {value}
-        </Button>
+      <BackgroundImage src="/bg.png">
         <Container
           style={{
-            width: "100vw",
+            width: "100%",
             minHeight: "100vh",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: "10em",
-            padding: "2em 10em",
-            boxSizing: "border-box",
-            backgroundColor: "#1a1a1a",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {value === "SHOW COLLECTED" ? (
-            showlistedTokens
-          ) : (
-            collectedTokens
-          )}
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              fontSize: "4rem",
+              color: "#ffffff",
+              padding: "1rem",
+            }}
+          >
+            PIXEL VAULT MARKET
+          </Box>
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              fontSize: "1.25rem",
+              color: "#ffffff",
+              padding: "1rem",
+              gap: "1em",
+              fontFamily: "Roboto Condensed",
+            }}
+          >
+            <Box
+              onClick={() => setmarket(true)}
+              style={{
+                fontSize: "1.5rem",
+                textDecoration: market ? "underline" : "none",
+                color: market ? "#00E29E" : "#ffffff",
+                cursor: "pointer",
+
+              }}
+            >
+              Market
+            </Box>
+            <Box
+              onClick={() => setmarket(false)}
+              style={{
+                fontSize: "1.5rem",
+                color: market ? "#ffffff" : "#00E29E",
+                textDecoration: market ? "none" : "underline",
+                cursor: "pointer"
+              }}
+            >
+              Collections
+            </Box>
+          </Box>
+
+          <Container
+            style={{
+              width: "100vw",
+              minHeight: "100vh",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: "10em",
+              padding: "2em 10em",
+              boxSizing: "border-box",
+            }}
+          >
+            {market ? showlistedTokens : collectedTokens}
+          </Container>
         </Container>
-      </Container>
+      </BackgroundImage>
     </MantineProvider>
   );
 };

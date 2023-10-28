@@ -31,6 +31,7 @@ const Header = ({ Tezos, wallet, setTezos }) => {
           flexDirection: "row-reverse",
           top: "2.5em",
           right: "2em",
+          pointerEvents: "all"
         }}
       >
         <Button

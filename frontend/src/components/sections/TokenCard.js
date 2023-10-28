@@ -1,86 +1,86 @@
 import React from "react";
-import {
-  Image,
-  Button,
-  Container,
-  Paper,
-  Box,
-  Text,
-  MantineProvider,
-} from "@mantine/core";
+import { useSelector } from "react-redux";
+import { Image, Button, Box, MantineProvider } from "@mantine/core";
+import Tilt from "react-parallax-tilt";
 
 const TokenCard = ({ item, onClick, onCollect }) => {
+  const userAddress = useSelector((state) => state.walletConfig.user);
   return (
     <MantineProvider>
-      <Box
-        style={{
-          color: "white",
-          fontFamily: "inter",
-        }}
-      >
+      <Tilt>  
         <Box
-          width="100%"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "2rem",
-            padding: "1em",
-          }}
-        >
-          {item.name}
-        </Box>
-        <Image
           onClick={onClick}
           style={{
-            width: "100%",
-            aspectRatio: "1/1",
-
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }}
-          src={`https://ipfs.io/ipfs/${item.image.split("ipfs://")[1]}`}
-          alt={item.description}
-        />
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width:"100%",
-
+            color: "white",
+            backgroundColor: "#131313",
+            height: "450px",
+            padding: "2em",
+            borderRadius: "30px",
+            cursor: "pointer",
           }}
         >
           <Box
+            width="100%"
             style={{
+              display: "flex",
+              justifyContent: "center",
               fontSize: "2rem",
-              padding: "1em 0em",
+              paddingBottom: "0.5em",
             }}
           >
-            {item.amount}
+            {item.name}
           </Box>
-
-          <Button
-            onClick={onCollect}
-            disabled={!item.collectable}
+          <Image
             style={{
-              backgroundColor: "transparent",
-              border: "none",
-              color: "#00E29E",
-              fontSize: "1rem",
-              border: "2px solid #00E29E",
-              padding: "0.5rem 1rem",
+              width: "100%",
+              aspectRatio: "1/1",
+              borderRadius: "30px",
               "&:hover": {
-                backgroundColor: "#00E29E",
-                color: "#000000",
                 cursor: "pointer",
               },
             }}
+            src={`https://ipfs.io/ipfs/${item.image.split("ipfs://")[1]}`}
+            alt={item.description}
+          />
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
           >
-            {item.collectable ? "Buy Now" : "Sold Out"}
-          </Button>
+            <Box
+              style={{
+                fontSize: "2rem",
+                padding: "1em 0em",
+              }}
+            >
+              {item.amount}
+            </Box>
+
+            <Button
+              onClick={onCollect}
+              disabled={!item.collectable}
+              style={{
+                backgroundColor: "#00E29E",
+                border: "none",
+                color: "black",
+                fontSize: "1rem",
+                border: "2px solid #00E29E",
+                padding: "0.5rem 1rem",
+                "&:hover": {
+                  backgroundColor: "#00E29E",
+                  color: "#000000",
+                  cursor: "pointer",
+                },
+              }}
+            >
+              {item.collectable ? item.holder === userAddress.userAddress ? "Update Value" : "Buy Now" : "Publish"}
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      </Tilt>
     </MantineProvider>
   );
 };
