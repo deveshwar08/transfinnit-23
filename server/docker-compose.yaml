@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    container_name: mysql_db
+    image: mysql:8
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./mysql_volume:/var/lib/mysql
+      - ./scripts/initdb:/docker-entrypoint-initdb.d
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_EXTERNAL_PORT}:80"
+    depends_on:
+      - db
+
+  app:
+    container_name: tezosmarket_api
+    image: server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - ${SERVER_EXTERNAL_PORT}:8000
+    depends_on:
+      - db
