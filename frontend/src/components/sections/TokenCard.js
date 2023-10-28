@@ -1,42 +1,87 @@
 import React from "react";
+import {
+  Image,
+  Button,
+  Container,
+  Paper,
+  Box,
+  Text,
+  MantineProvider,
+} from "@mantine/core";
 
 const TokenCard = ({ item, onClick, onCollect }) => {
   return (
-    <div className="ui fluid card">
-      <div className="image">
-        <img
+    <MantineProvider>
+      <Box
+        style={{
+          color: "white",
+          fontFamily: "inter",
+        }}
+      >
+        <Box
+          width="100%"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "2rem",
+            padding: "1em",
+          }}
+        >
+          {item.name}
+        </Box>
+        <Image
           onClick={onClick}
-          style={{ maxHeight: "200px", objectFit: "cover" }}
+          style={{
+            width: "100%",
+            aspectRatio: "1/1",
+
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
           src={`https://ipfs.io/ipfs/${item.image.split("ipfs://")[1]}`}
           alt={item.description}
         />
-      </div>
-      <div className="content">
-        <div className="right floated">
-          Price:
-          <div style={{ color: "black" }}>{item.amount}</div>
-        </div>
-        <div className="header">{item.name}</div>
-        <div className="meta">{item.symbol}</div>
-        <div className="description">
-          {item.description.length > 15
-            ? item.description.slice(0, 15) + "..."
-            : item.description}
-        </div>
-      </div>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width:"100%",
 
-      <div className="extra content">
-        <span className="right floated">
-          <button className="ui basic button" onClick={onCollect}>
-            {item.collectable ? "Buy" : "Sold Out"}
-          </button>
-        </span>
-        <span>
-          Token ID:
-          <div style={{ color: "black" }}>{item.token_id}</div>
-        </span>
-      </div>
-    </div>
+          }}
+        >
+          <Box
+            style={{
+              fontSize: "2rem",
+              padding: "1em 0em",
+            }}
+          >
+            {item.amount}
+          </Box>
+
+          <Button
+            onClick={onCollect}
+            disabled={!item.collectable}
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              color: "#00E29E",
+              fontSize: "1rem",
+              border: "2px solid #00E29E",
+              padding: "0.5rem 1rem",
+              "&:hover": {
+                backgroundColor: "#00E29E",
+                color: "#000000",
+                cursor: "pointer",
+              },
+            }}
+          >
+            {item.collectable ? "Buy Now" : "Sold Out"}
+          </Button>
+        </Box>
+      </Box>
+    </MantineProvider>
   );
 };
 

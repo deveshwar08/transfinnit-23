@@ -1,11 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  connectWallet,
-  disconnectWallet,
-  incrementData,
-  decrementData,
-} from "../actions";
+import { Box, MantineProvider, Button } from "@mantine/core";
+import { connectWallet, disconnectWallet } from "../actions";
 import { Link } from "react-router-dom";
 
 const Header = ({ Tezos, wallet, setTezos }) => {
@@ -24,34 +20,40 @@ const Header = ({ Tezos, wallet, setTezos }) => {
   };
 
   return (
-    <div className="ui menu black" style={{ marginTop: "5px" }}>
-      <a href="/#" className="ui header item">
-        NFTs
-      </a>
-      <Link className="item" to="/">
-        Home
-      </Link>
-
-      {selector.userAddress !== "" ? (
-        <Link className="item" to="/create">
-          Create NFT
-        </Link>
-      ) : null}
-
-      <div className="right menu">
-        {selector.userAddress === "" ? (
-          <a href="/#" className="item" onClick={onClick}>
-            Connect Wallet
-          </a>
-        ) : (
-          <a href="/#" className="item" onClick={onClick}>
-            Disconnect Wallet
-          </a>
-        )}
-      </div>
-    </div>
+    <MantineProvider>
+      <Box
+        style={{
+          backgroundColor: "transparent",
+          position: "absolute",
+          fontFamily: "inter",
+          display: "flex",
+          width: "100%",
+          flexDirection: "row-reverse",
+          top: "2.5em",
+          right: "2em",
+        }}
+      >
+        <Button
+          onClick={onClick}
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            color: "#00E29E",
+            fontSize: "1.5rem",
+            border: "2px solid #00E29E",
+            padding: "0.5rem 1rem",
+            "&:hover": {
+              backgroundColor: "#00E29E",
+              color: "#000000",
+              cursor: "pointer",
+            },
+          }}
+        >
+          {selector.userAddress === "" ? "Connect Wallet" : "Disconnect Wallet"}
+        </Button>
+      </Box>
+    </MantineProvider>
   );
-
 };
 
 export default Header;
