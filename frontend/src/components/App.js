@@ -3,6 +3,7 @@ import Header from "./Header";
 import { useSelector, useDispatch } from "react-redux";
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
+import { MantineProvider } from "@mantine/core";
 import {
   NetworkType,
   BeaconEvent,
@@ -65,15 +66,17 @@ const App = () => {
   }, [Tezos, dispatch]);
 
   return (
-    <div className="ui container">
-      <Header Tezos={Tezos} setTezos={setTezos} wallet={wallet} />
-      <Routes>
-        <Route path="/create" element={<Create Tezos={Tezos} />} />
-        <Route path="/show/:id" element={<Show Tezos={Tezos} />} />
-        <Route path="/" element={<Main Tezos={Tezos} />} />
-        <Route path="/market" element={<Market Tezos={Tezos} />} />
-      </Routes>
-    </div>
+    <MantineProvider>
+      <div className="ui container">
+        <Header Tezos={Tezos} setTezos={setTezos} wallet={wallet} />
+        <Routes>
+          <Route path="/create" element={<Create Tezos={Tezos} />} />
+          <Route path="/show/:id" element={<Show Tezos={Tezos} />} />
+          <Route path="/" element={<Main Tezos={Tezos} />} />
+          <Route path="/market" element={<Market Tezos={Tezos} />} />
+        </Routes>
+      </div>
+    </MantineProvider>
   );
 };
 

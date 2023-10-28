@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Container,
   MantineProvider,
@@ -7,6 +8,7 @@ import {
   Button,
   BackgroundImage,
 } from "@mantine/core";
+import styles from "./styles/main.module.css";
 
 const Main = () => {
   return (
@@ -36,6 +38,7 @@ const Main = () => {
             }}
           >
             <Container
+              className={styles.heading}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -44,7 +47,7 @@ const Main = () => {
                 fontSize: "5rem",
               }}
             >
-              PIXEL VAULT
+              <span id={styles.heading}>PIXEL VAULT</span>
               <Box
                 style={{
                   display: "flex",
@@ -79,28 +82,12 @@ const Main = () => {
                   boxSizing: "border-box",
                 }}
               >
-                <Button
-                  style={{
-                    backgroundColor: "#ffffff",
-                    color: "#000000",
-                    padding: "0.5rem 2rem",
-                    fontSize: "2rem",
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  Mint Now
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: "#F72485",
-                    color: "#ffffff",
-                    padding: "0.5rem 2rem",
-                    fontSize: "2rem",
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  Explore
-                </Button>
+                <Link to="/create">
+                  <button id={styles.mint}>Mint Now</button>
+                </Link>
+                <Link to="/market">
+                  <button id={styles.explore}>Explore</button>
+                </Link>
               </Container>
             </Container>
             <Container

@@ -1,102 +1,267 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { collectNFT } from "../../actions";
+import { collectNFT, publish_nft, updateNFT } from "../../actions";
+import styles from "./styles/show.module.css";
+import { Container, Box, BackgroundImage } from "@mantine/core";
+import { Link } from "react-router-dom";
+import { Loader } from "@mantine/core";
 
 const Show = ({ Tezos }) => {
   const selector = useSelector((state) => state.tokenData);
+  const userAddress = useSelector((state) => state.walletConfig.user);
   const dispatch = useDispatch();
   const { id } = useParams();
   const [data, setData] = useState(null);
+  const [opened, setOpened] = useState(false);
+  const inputRef = useRef();
+  const handleOpen = () => {
+    setOpened(true);
+  };
+  const handleClose = () => {
+    setOpened(false);
+  };
+  console.log(opened);
 
   useEffect(() => {
     const temp = selector[parseInt(id)];
     if (temp) {
       setData(temp);
+      console.log(data);
     }
   }, [selector, id]);
   return (
-    <div className="ui internally celled grid">
-      {data !== null ? (
-        <>
-          <div className="ui">{data.description}</div>
-          <div className="row">
-            <div className="nine wide column">
+    <BackgroundImage src="/bg.png">
+      <Link to="/market">
+        <div
+          className={styles.left}
+          style={{
+            position: "absolute",
+            top: "30px",
+            left: "30px",
+            height: "50px",
+            width: "50px",
+            background: `url("/left.png")`,
+            backgroundSize: "cover",
+            cursor: "pointer",
+          }}
+        ></div>
+      </Link>
+      {opened ? (
+        <Container
+          onClick={handleClose}
+          style={{
+            width: "100%",
+            height: "100vh",
+            position: "absolute",
+            zIndex: "100",
+            backgroundColor: "#00000066",
+          }}
+        ></Container>
+      ) : (
+        <></>
+      )}
+
+      <div
+        class={styles.modal}
+        style={{
+          display: opened ? "flex" : "none",
+          position: "absolute",
+          zIndex: "1000",
+          width: "300px",
+          height: "300px",
+          backgroundColor: "#1a1a1a",
+          top: "30%",
+          left: "40%",
+          borderRadius: "30px",
+          justifyContent: "center",
+          gap: "1em",
+          alignItems: "center",
+          fontSize: "2rem",
+          flexDirection: "column",
+        }}
+      >
+        {" "}
+        <div onClick={handleClose} className={styles.close}>
+          X
+        </div>
+        <label for={styles.input}>Amount</label>
+        <input ref={inputRef} id={styles.input}></input>
+        <button
+          class={styles.button}
+          onClick={() => {
+            if (data.collectable) {
+              dispatch(
+                updateNFT({
+                  Tezos: Tezos,
+                  amount: inputRef.current.value,
+                  id: data.token_id,
+                })
+              );
+            } else {
+              dispatch(
+                publish_nft({
+                  Tezos: Tezos,
+                  amount: inputRef.current.value,
+                  id: id,
+                })
+              );
+            }
+          }}
+        >
+          Publish
+        </button>
+      </div>
+      <Container
+        style={{
+          width: "100%",
+          minHeight: "100vh",
+          display: "flex",
+          color: "white",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          fontFamily: "inter",
+        }}
+      >
+        {data !== null ? (
+          <>
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: "0.7rem",
+                gap: "1em",
+              }}
+            >
               <img
+                className={styles.img}
                 src={`https://ipfs.io/ipfs/${data.image.split("ipfs://")[1]}`}
                 alt={data.description}
+                style={{
+                  borderRadius: "30px",
+                }}
               />
-            </div>
-            <div className="seven wide column container center">
-              <div className="ui">
-                <h3 className="ui right floated header">{data.name}</h3>
-                <h3 className="ui left aligned header">Name</h3>
-              </div>
-              <div className="ui">
-                <h3 className="ui right floated header">{data.symbol}</h3>
-                <h3 className="ui left aligned header">Symbol</h3>
-              </div>
-              <div
-                className="ui "
-                onClick={() => {
-                  navigator.clipboard.writeText(data.holder + "");
-                }}
-              >
-                <h3
-                  className="ui right floated header green"
-                  style={{ cursor: "pointer" }}
-                  data-content="Copy to clipboard"
-                >
-                  {data.holder?.slice(0, 6) + "..."}
-                </h3>
-                <h3 className="ui left aligned header">Holder</h3>
-              </div>
-              <div
-                className="ui "
-                onClick={() => {
-                  navigator.clipboard.writeText(data.author + "");
-                }}
-              >
-                <h3
-                  className="ui right floated header green"
-                  style={{ cursor: "pointer" }}
-                  data-content="Copy to clipboard"
-                >
-                  {data.author?.slice(0, 6) + "..."}
-                </h3>
-                <h3 className="ui left aligned header">Author</h3>
-              </div>
-              <div className="ui">
-                <h3 className="ui right floated header">{data.amount}</h3>
-                <h3 className="ui left aligned header">Price</h3>
-              </div>
-              <div className="ui">
-                <h3 className="ui right floated header">{data.token_id}</h3>
-                <h3 className="ui left aligned header">Token ID</h3>
-              </div>
-              {/*...*/}
-            </div>
-          </div>
-          <div className="ui">
-            <button
-              className="fluid ui button basic green"
-              onClick={() =>
-                data.collectable &&
-                dispatch(
-                  collectNFT({
-                    Tezos,
-                    amount: data.amount,
-                    id: data.token_id,
-                  })
-                )
-              }
+              Token {data.token_id}
+            </Box>
+
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              {data.collectable ? "Buy" : "Sold Out"}
-            </button>
-          </div>
-        </>
-      ) : null}
-    </div>
+              <Box
+                style={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  width: "400px",
+                  height: "500px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  paddingTop: "2em",
+                  padding: "2em",
+                  alignItems: "center",
+                  gap: "2em",
+                  boxSizing: "border-box",
+                  marginBottom: "-4rem",
+                }}
+              >
+                <Box
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "2rem",
+                    width: "100%",
+                  }}
+                >
+                  <Box>{data.name}</Box>
+                </Box>
+                <Box
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* <p>{data.description}</p>
+                <p>{data.prompt}</p> */}
+                  DESCRIPTION
+                  <p className={styles.p}>
+                    kfhsekl;fjeh rgk;wehgklserjgdhf.kg tsjerth .akerwh.kgsdrzjhg
+                    sd.xkgjdftht kdrsyjhwsre hjs;lkgj s'lsikdrhj;
+                    slgkfjsd;a;etiv ajg'apdrslitgja lfhdkji'drtpsyo
+                    jser'gpsewitu wj'eshposjre'pt skzjndrl'z ;yjsexhl sortu
+                    hwseail uwbgt.akerjh zs.kr zsg kfhsekl;fjeh
+                    rgk;wehgklserjgdhf.a lfhdkji'drtpsyo jser'gpsewitu
+                    wj'eshposjre'pt skzjndrl'z ;yjsexhl sortu hwseail
+                    uwbgt.akerjh zs.kr zsg kfhsekl;fjeh rgk;wehgklserjgdhf.kg
+                    tsjerth .akerwh.kgsdrzjhg sd.xkgjdftht kdrsyjhwsre
+                    hjs;lkgj;lkefhlaksdjfha; s ga;gjkadsrhg .sdhxdfkl.
+                    l;xdfkl;hsn
+                  </p>
+                  PROMPT
+                  <p className={styles.p}>
+                    xlofirywerp envuhdfpig eryug;seiu hslfkgsdtpoy
+                    eyauiedrshgrst; ykrsjhns.dtl yk ueq[5yo
+                    'aeirjdsg;zdrori8uq3f ;'asZHFG;asdoriowub qy'ejapgsdrtko]
+                  </p>
+                </Box>
+              </Box>
+              <Box
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
+                <Box
+                  style={{
+                    fontSize: "2em",
+                  }}
+                >
+                  {data.amount}{" "}
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                    }}
+                  >
+                    {" "}
+                    Mutez
+                  </span>
+                </Box>
+                <button
+                  className={styles.button}
+                  onClick={() => {
+                    if (
+                      data.collectable &&
+                      data.holder !== userAddress.userAddress
+                    ) {
+                      dispatch(
+                        collectNFT({
+                          Tezos: Tezos,
+                          amount: data.amount,
+                          id: data.token_id,
+                        })
+                      );
+                    } else {
+                      setOpened(true);
+                    }
+                  }}
+                >
+                  {data.collectable
+                    ? data.holder === userAddress.userAddress
+                      ? "Update Value"
+                      : "Buy Now"
+                    : "Publish"}
+                </button>
+              </Box>
+            </Box>
+          </>
+        ) : null}
+      </Container>
+    </BackgroundImage>
   );
 };
 
