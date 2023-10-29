@@ -5,7 +5,7 @@ Pixel Vault is a cutting-edge NFT marketplace that empowers users to unleash the
 
 Part of the Transfinitte Hackathon 2023 - TZ02 Problem Statement.
 
-![Home Page](https://github.com/deveshwar08/transfinnit-23/assets/105509441/c426ac62-74ed-492a-9652-6e4cdb4bbae9)
+![Home Page](./marketplace.png)
 
 ## Check it out!
 - [MarketPlace](https://marketplace-deveshwar08.cloud.okteto.net)
