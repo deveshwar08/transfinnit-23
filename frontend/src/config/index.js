@@ -1,5 +1,5 @@
 const config = {
-  serverAPI: "http://localhost:7000",
+  serverAPI: "https://api-deveshwar08.cloud.okteto.net",
   contractAddress: "KT1NiLKWihGxocPeKG33VdJ8ZfURHvxvLz44",
   tokenAddress: "KT1CE1iA9TKxW43icMqvGRzuVe3zLZV9qgLD",
   storageAPIKey:
