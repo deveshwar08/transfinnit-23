@@ -1,42 +1,80 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { Image, Button, Box, MantineProvider } from "@mantine/core";
+import Tilt from "react-parallax-tilt";
 
 const TokenCard = ({ item, onClick, onCollect }) => {
+  const userAddress = useSelector((state) => state.walletConfig.user);
   return (
-    <div className="ui fluid card">
-      <div className="image">
-        <img
-          onClick={onClick}
-          style={{ maxHeight: "200px", objectFit: "cover" }}
-          src={`https://ipfs.io/ipfs/${item.image.split("ipfs://")[1]}`}
-          alt={item.description}
-        />
-      </div>
-      <div className="content">
-        <div className="right floated">
-          Price:
-          <div style={{ color: "black" }}>{item.amount}</div>
-        </div>
-        <div className="header">{item.name}</div>
-        <div className="meta">{item.symbol}</div>
-        <div className="description">
-          {item.description.length > 15
-            ? item.description.slice(0, 15) + "..."
-            : item.description}
-        </div>
-      </div>
+    <MantineProvider>
+      <Tilt>
+        <Box
+          style={{
+            color: "white",
+            backgroundColor: "#131313",
+            height: "450px",
+            padding: "2em",
+            borderRadius: "30px",
+          }}
+        >
+          <Box
+            width="100%"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "2rem",
+              paddingBottom: "0.5em",
+            }}
+          >
+            {item.name}
+          </Box>
+          <Image
+            onClick={onClick}
+            style={{
+              width: "100%",
+              aspectRatio: "1/1",
+              borderRadius: "30px",
+              cursor: "pointer",
+            }}
+            src={`https://ipfs.io/ipfs/${item.image.split("ipfs://")[1]}`}
+            alt={item.description}
+          />
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Box
+              style={{
+                fontSize: "2rem",
+                padding: "1em 0em",
+              }}
+            >
+              {item.amount}
+            </Box>
 
-      <div className="extra content">
-        <span className="right floated">
-          <button className="ui basic button" onClick={onCollect}>
-            {item.collectable ? "Buy" : "Sold Out"}
-          </button>
-        </span>
-        <span>
-          Token ID:
-          <div style={{ color: "black" }}>{item.token_id}</div>
-        </span>
-      </div>
-    </div>
+            <Button
+              disabled={!item.collectable}
+              onClick={onClick}
+              style={{
+                backgroundColor: "#00E29E",
+                border: "none",
+                color: "black",
+                fontSize: "1rem",
+                border: "2px solid #00E29E",
+                padding: "0.5rem 1rem",
+                cursor: "pointer",
+              }}
+            >
+              View
+            </Button>
+          </Box>
+        </Box>
+      </Tilt>
+    </MantineProvider>
   );
 };
 
