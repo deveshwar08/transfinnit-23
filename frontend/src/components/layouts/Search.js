@@ -54,7 +54,7 @@ const HitComponent = ({ hit }) => {
 						src={`https://ipfs.io/ipfs/${hit.image.split("ipfs://")[1]}`}
 						alt={hit.description}
 					/>
-					{/* <Box
+					<Box
 						style={{
 							display: "flex",
 							justifyContent: "space-between",
@@ -70,7 +70,22 @@ const HitComponent = ({ hit }) => {
 						>
 							{hit.amount}
 						</Box>
-					</Box> */}
+						<Button
+							disabled={!hit.collectable}
+							onClick={() => navigate(`/show/${hit.token_id}`)}
+							style={{
+								backgroundColor: "#00E29E",
+								border: "none",
+								color: "black",
+								fontSize: "1rem",
+								border: "2px solid #00E29E",
+								padding: "0.5rem 1rem",
+								cursor: "pointer",
+							}}
+						>
+							View
+						</Button>
+					</Box>
 				</Box>
 			</Tilt>
 		</div>

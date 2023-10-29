@@ -69,7 +69,7 @@ const TokenCard = ({ item, onClick, onCollect }) => {
                 cursor: "pointer",
               }}
             >
-              view
+              View
             </Button>
           </Box>
         </Box>
