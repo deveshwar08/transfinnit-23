@@ -1,0 +1,10 @@
+.listItems {
+	& > ol {
+		display:grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		list-style: none;
+		padding: 2em 10em;
+		gap: 10em,
+
+	}
+}
