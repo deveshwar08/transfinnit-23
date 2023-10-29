@@ -2,6 +2,11 @@ import { TezosToolkit } from "@taquito/taquito";
 import { NetworkType } from "@airgap/beacon-sdk";
 import config from "../config";
 import axios from "axios";
+const algoliasearch = require('algoliasearch');
+
+const client = algoliasearch('RC9QU0XNET', '92a8dc1696d49f7c4c93eab4c8979043');
+
+const index = client.initIndex('nfts');
 
 export const connectWallet = ({ wallet, Tezos }) => {
   return async (dispatch) => {
@@ -133,6 +138,8 @@ export const fetchData = () => {
           token_id: d2[i].value.token_id,
         };
       }
+	  index.clearObjects();
+	  index.saveObjects(tokenData, { autoGenerateObjectIDIfNotExist: true });
       console.log(tokenData);
       dispatch({ type: "SET_TOKEN_DATA", payload: tokenData });
     } catch (e) {
