@@ -1,0 +1,61 @@
+.heading {
+  letter-spacing: normal;
+  animation: opening 0.5s ease-in-out;
+}
+
+#mint {
+  font-size: 2rem;
+  padding: 0.5rem 2rem;
+  background-color: transparent;
+  border: none;
+  color: #9710ff;
+  border: 2px solid;
+  transition: all 0.5s;
+}
+
+#mint:hover {
+  background-color: #9710ff;
+  color: black;
+  cursor: pointer;
+  transform: scale(0.9);
+  transition: all 0.5s;
+}
+
+#explore {
+  font-size: 2rem;
+  padding: 0.5rem 2rem;
+  border: none;
+  background: linear-gradient(45deg, #1020ff, #ff0666);
+  background-size: 200%;
+  background-position: top left  ;
+  color: black;
+  border: 2px solid;
+  transition: all 0.5s;
+}
+
+#explore:hover {
+  background-position: top right;
+}
+
+@keyframes opening {
+  0% {
+    letter-spacing: 0.4em;
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+.image{
+  transition: all 0.5s;
+  border-radius: 20px;
+}
+
+.image:hover{
+  transform: scale(1.1);
+  transition: all 0.1s;
+}
+

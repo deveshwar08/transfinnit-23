@@ -1,11 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  connectWallet,
-  disconnectWallet,
-  incrementData,
-  decrementData,
-} from "../actions";
+import { Box, MantineProvider, Button } from "@mantine/core";
+import { connectWallet, disconnectWallet } from "../actions";
 import { Link } from "react-router-dom";
 
 const Header = ({ Tezos, wallet, setTezos }) => {
@@ -24,34 +20,51 @@ const Header = ({ Tezos, wallet, setTezos }) => {
   };
 
   return (
-    <div className="ui menu black" style={{ marginTop: "5px" }}>
-      <a href="/#" className="ui header item">
-        NFTs
-      </a>
-      <Link className="item" to="/">
-        Home
-      </Link>
-
-      {selector.userAddress !== "" ? (
-        <Link className="item" to="/create">
-          Create NFT
+    <MantineProvider>
+      <Box
+        style={{
+          backgroundColor: "transparent",
+          position: "absolute",
+          fontFamily: "inter",
+          display: "flex",
+          width: "100%",
+          top: "2.5em",
+          right: "2em",
+          pointerEvents: "all",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Link to="./">
+          <img
+            style={{
+              height: "5em",
+              width: "5em",
+              borderRadius: "50%",
+              marginLeft: "3em",
+              cursor: "pointer",
+            }}
+            src="/icon.jpeg"
+          ></img>
         </Link>
-      ) : null}
 
-      <div className="right menu">
-        {selector.userAddress === "" ? (
-          <a href="/#" className="item" onClick={onClick}>
-            Connect Wallet
-          </a>
-        ) : (
-          <a href="/#" className="item" onClick={onClick}>
-            Disconnect Wallet
-          </a>
-        )}
-      </div>
-    </div>
+        <Button
+          onClick={onClick}
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            color: "#00E29E",
+            fontSize: "1.5rem",
+            border: "2px solid #00E29E",
+            padding: "0.5rem 1rem",
+            cursor: "pointer",
+          }}
+        >
+          {selector.userAddress === "" ? "Connect Wallet" : "Disconnect Wallet"}
+        </Button>
+      </Box>
+    </MantineProvider>
   );
-
 };
 
 export default Header;

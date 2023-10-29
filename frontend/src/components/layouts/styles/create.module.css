@@ -1,0 +1,30 @@
+.input {
+  font-size: 1.2rem;
+  border-radius: 10px;
+  padding: 0.5rem 2rem;
+}
+.button {
+  font-size: 1.2rem;
+  border-radius: 10px;
+  padding: 1rem 2rem;
+  background: linear-gradient( 90deg,#9310ff, #ff0666);
+  background-size: 400%;
+  background-position: left;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-height: 40px;
+  transition: all 0.5s ease-in-out;
+}
+
+.button:hover{
+  background: linear-gradient( 90deg,#ff0666, #9310ff);
+  background-position: right;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  min-height: 40px;
+  transition: all 0.5s ease-in-out;
+}
