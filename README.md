@@ -10,28 +10,29 @@ Part of the Transfinitte Hackathon 2023 - TZ02 Problem Statement.
 ## Check it out!
 - [MarketPlace](https://marketplace-deveshwar08.cloud.okteto.net)
 - [API](https://api-deveshwar08.cloud.okteto.net)
+- [PPT and Demo](https://drive.google.com/drive/folders/1mKKp7VaB3OXrgNXvPIBO5fo9-EB6DHs_)
 
-# Environment Configuration Files
+## Environment Configuration Files
 
-## Frontend (src/config/index.js)
+### Frontend (src/config/index.js)
 
 Here is an example structure for the `src/config/index.js` file:
 
 ```env
 serverAPI: "YOUR_SERVER_URL",
-contractAddress: "Your_MARKETPLACE_CONTRACT_ADDRESS",
+contractAddress: "YOUR_MARKETPLACE_CONTRACT_ADDRESS",
 tokenAddress: "YOUR_TOKEN_CONTRACT_ADDRESS",
 storageAPIKey: "IPFS_STORAGE_KEY",
 ```
-## Backend (.env)
+### Backend (.env)
 
 Here is an example structure for the `.env` file:
 
 ```env
-SERVER_EXTERNAL_PORT="YOUR_SERVER_PORT"
-FRONTEND_EXTERNAL_PORT="YOUR_FRONTEND_PORT_HERE"
-FRONTEND_URL="YOUR_FRONTEND_URL"
-API_KEY="STABLE_DIFFUSION_API_KEY"
+SERVER_EXTERNAL_PORT=<YOUR_SERVER_PORT>
+FRONTEND_EXTERNAL_PORT=<YOUR_FRONTEND_PORT_HERE>
+FRONTEND_URL=<YOUR_FRONTEND_URL>
+API_KEY=<STABLE_DIFFUSION_API_KEY>
 ```
 
 ## Getting Started
